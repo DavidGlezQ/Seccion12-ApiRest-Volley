@@ -18,19 +18,19 @@ class MainViewModel: ViewModel() { // Aqui se alamcenan todas las tiendas de nue
         interactor = MainInteractor()
     }
 
-    private val stores: MutableLiveData<List<StoreEntity>> by lazy{
-        MutableLiveData<List<StoreEntity>>().also {
+    private val stores: MutableLiveData<MutableList<StoreEntity>> by lazy{
+        MutableLiveData<MutableList<StoreEntity>>().also {
             loadStores()
         }
     }
 
-    fun getStores(): LiveData<List<StoreEntity>>{
+    fun getStores(): LiveData<MutableList<StoreEntity>>{
         return stores
     }
 
     private fun loadStores(){
         // llamada funcion de orden superior
-        interactor.getStoresRoom {
+        interactor.getStores {
             stores.value = it
             storeList = it
         }

@@ -7,6 +7,7 @@ import com.david_glez.seccion9_proyecto_stores.StoreApplication
 import com.david_glez.seccion9_proyecto_stores.common.entities.StoreEntity
 import com.david_glez.seccion9_proyecto_stores.common.utils.Constants
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.uiThread
 
@@ -18,11 +19,21 @@ class MainInteractor { //Model
     fun getStores(callback: (MutableList<StoreEntity>) -> Unit){
         val URL = Constants.STORES_URL + Constants.GET_ALL_PATH
         val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, URL, null, { response ->
-            Log.i("Response", response.toString())
-            val status = response.getInt(Constants.STATUS_PROPERTY)
+
+            //val status = response.getInt(Constants.STATUS_PROPERTY)
+            val status = response.optInt(Constants.STATUS_PROPERTY, Constants.ERROR)
+
             if (status == Constants.SUCCESS){
-                Log.i("status", status.toString())
+
+                val jsonList = response.optJSONArray(Constants.STORES_PROPERTY)?.toString()
+                if (jsonList != null){
+                    val mutableListType = object: TypeToken<MutableList<StoreEntity>>(){}.type
+                    val storeList = Gson().fromJson<MutableList<StoreEntity>>(jsonList, mutableListType)
+                    callback(storeList)
+                }
+
             }
+
         },{
             it.printStackTrace()
         })
@@ -30,7 +41,7 @@ class MainInteractor { //Model
         StoreApplication.storeAPI.addToRequestQueue(jsonObjectRequest)
     }
 
-    // funcion orden superios
+    // funcion orden superior
     fun getStoresRoom(callback: (MutableList<StoreEntity>) -> Unit){
         doAsync {
             val storesList = StoreApplication.dataBase.storeDao().getAllStores()

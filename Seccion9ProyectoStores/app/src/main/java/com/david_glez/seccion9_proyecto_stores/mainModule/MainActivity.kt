@@ -4,23 +4,20 @@ package com.david_glez.seccion9_proyecto_stores.mainModule
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.david_glez.seccion9_proyecto_stores.common.entities.StoreEntity
 import com.david_glez.seccion9_proyecto_stores.editModule.EditStoreFragment
-import com.david_glez.seccion9_proyecto_stores.common.utils.MainAux
 import com.david_glez.seccion9_proyecto_stores.R
-import com.david_glez.seccion9_proyecto_stores.StoreApplication
 import com.david_glez.seccion9_proyecto_stores.databinding.ActivityMainBinding
 import com.david_glez.seccion9_proyecto_stores.editModule.viewModel.EditStoreViewModel
 import com.david_glez.seccion9_proyecto_stores.mainModule.adapters.OnClickListener
 import com.david_glez.seccion9_proyecto_stores.mainModule.adapters.StoreAdapter
 import com.david_glez.seccion9_proyecto_stores.mainModule.viewModel.MainViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), OnClickListener {
 
@@ -50,6 +47,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         mMainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         mMainViewModel.getStores().observe(this) { stores->
             mAdapter.setStores(stores)
+            mBinding.progressBar.visibility = if (stores.size == 0) View.VISIBLE else View.GONE
         }
 
         mEditStoreViewModel = ViewModelProvider(this).get(EditStoreViewModel::class.java)
