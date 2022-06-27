@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.david_glez.seccion9_proyecto_stores.common.database.StoreAPI
 import com.david_glez.seccion9_proyecto_stores.common.database.StoreDataBase
 
 class StoreApplication : Application() {
@@ -11,6 +12,7 @@ class StoreApplication : Application() {
     //Singleton
     companion object{
         lateinit var dataBase: StoreDataBase
+        lateinit var storeAPI: StoreAPI
     }
 
     override fun onCreate() {
@@ -27,5 +29,8 @@ class StoreApplication : Application() {
             StoreDataBase::class.java, "StoreDataBase")
             .addMigrations(MIGRATION_1_2)
             .build()
+
+        //Volley
+        storeAPI = StoreAPI.getInstance(this)
     }
 }

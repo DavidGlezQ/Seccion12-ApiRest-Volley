@@ -3,11 +3,8 @@ package com.david_glez.seccion9_proyecto_stores.mainModule.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.david_glez.seccion9_proyecto_stores.StoreApplication
 import com.david_glez.seccion9_proyecto_stores.common.entities.StoreEntity
 import com.david_glez.seccion9_proyecto_stores.mainModule.model.MainInteractor
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 
 class MainViewModel: ViewModel() { // Aqui se alamcenan todas las tiendas de nuestro modelo
 
@@ -33,7 +30,7 @@ class MainViewModel: ViewModel() { // Aqui se alamcenan todas las tiendas de nue
 
     private fun loadStores(){
         // llamada funcion de orden superior
-        interactor.getStores {
+        interactor.getStoresRoom {
             stores.value = it
             storeList = it
         }
